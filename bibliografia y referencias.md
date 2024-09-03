@@ -1,0 +1,1 @@
+- machine learning definition - Ethem Alpaydin-Introduction to Machine Learning-The MIT Press (2014)
