@@ -1,1 +1,7 @@
-- machine learning definition - Ethem Alpaydin-Introduction to Machine Learning-The MIT Press (2014)
+- Machine Learning:
+  - Ethem Alpaydin-Introduction to Machine Learning-The MIT Press (2014)
+- Supervised Learning:
+  - What is supervised learning? - https://www.ibm.com/topics/supervised-learning
+- Time Series:
+  - Gooijer, Jan G.; Hyndman, Rob J. (2006). "25 Tears of Time Series Forecasting": https://www.semanticscholar.org/paper/25-years-of-time-series-forecasting-Gooijer-Hyndman/9f24d338b657f480df96743c638e2cdeef469dbe
+  - Box, George, Time Series Analysis: forecasting and control
