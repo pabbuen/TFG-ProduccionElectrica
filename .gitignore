@@ -7,3 +7,5 @@ main.pdf
 main.out
 main.toc
 codigo/data
+venv
+.venv

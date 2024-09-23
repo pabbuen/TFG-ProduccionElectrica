@@ -193,11 +193,162 @@ de la serie.
 
 \section{Datos}
 
+En este apartado se tratará de describir tanto la fuente como 
+una descripción detallada de los datos que se han utilizado
+para la realización de las diferentes pruebas que se han 
+realizado para el trabajo actual.
+
 \subsection{Obtención}
+
+El trabajo se ha realizado sobre un dataset obtenido de 
+una competición de Kaggle llamada 
+\textit{``Enefit - Predict Energy Behavior of Prosumers"}
+realizada entre el 1 de Noviembre de 2023 y el 31 de 
+Enero de 2024.
 
 \subsection{Descripción}
 
-\section{Descripción del consumo energético}
+El conjunto de datos consta de varios archivos csv
+con diversas variables tanto energéticas como 
+meteorológicas. Dichos archivos fueron obtenidos 
+para predecir tanto la producción como el consumo
+de energía de diversas personas en Estonia con 
+instalación de paneles solares en sus hogares.
+
+A continuacíon se encuentra una descriciòn de 
+cada archivo y todas sus variables:
+
+\begin{enumerate}
+    \item \textbf{train.csv:}
+    \begin{itemize}
+        \item \textbf{country:} 
+        ID del pais.
+        \item \textbf{is\_business:}
+        Indica si el consumidor es una empresa o
+        un individuo.
+        \item \textbf{product\_type:}
+        ID de un mapa de tipo de contrato.
+        \item \textbf{target:} 
+        cantidad de consumo o producción del 
+        segmento relevante durante la hora. 
+        \item \textbf{is\_consumption:}
+        Indica si el elemento de la columna 
+        `target' es de consumo o producción.
+        \item \textbf{datetime:}
+        Hora local de Estonia en EET (UTC+2)/
+        EEST(UTC+3). Define el inicio del periodo
+        de una hora en el cual se da el valore de 
+        `target'.
+        \item \textbf{data\_block\_id:}
+        
+        \item \textbf{row\_id:}
+        Identificador único de la fila
+        \item \textbf{prediction\_unit\_id:}
+        Identificador único formado por la unión de
+        las columnas `country', `is\_business' y 
+        `product\_type'.
+    \end{itemize}
+    
+    \item \textbf{gas\_prizes.csv:}
+    \begin{itemize}
+        \item \textbf{origin\_date:}
+        Fecha en el que los precios diarios
+        se hicieron disponibles.
+        \item \textbf{forecast\_date:}
+        Fecha en la que los precios previstos
+        deberían ser relevantes
+        \item \textbf{[lowest/highest]\_price\_per\_mwh:}
+        El precio mínimo/máximo del gas natural en el 
+        mercado diario ese dia de negociación.
+        \item \textbf{data\_block\_id}
+    \end{itemize}
+
+    \item \textbf{client.csv:}
+    \begin{itemize}
+        \item \textbf{product\_type:}
+        \item \textbf{country:}
+        ID del código del pais.
+        \item \textbf{eic\_count:}
+        Número agregado de puntos de consumo
+        (EICs - European Identifier Code).
+        \item \textbf{installed\_capacity:}
+        Capacidad, en KWh, de los paneles solares
+        fotovoltaicos instalados.
+        \item \textbf{is\_business:}
+        \item \textbf{date:}
+        \item \textbf{data\_block\_id:}
+    \end{itemize}
+
+    \item \textbf{electricity\_prices.csv:}
+    \begin{itemize}
+        \item \textbf{origin\_date:}
+        \item \textbf{forecast\_date:}
+        \item \textbf{euros\_per\_mwh:}
+        Precio de la electricidad en MWh
+        \item \textbf{data\_block\_id:}
+    \end{itemize}
+
+    \item \textbf{forecast\_weather.csv:}
+    \begin{itemize}
+        \item \textbf{[latitude/longitude]:}
+        Coordenadas del pronóstico.
+        \item \textbf{origin\_datetime:}
+        Marca de tiempo de la generación del 
+        pronóstico.
+        \item \textbf{hours\_ahead:}
+        Horas entre la generación del prónostico 
+        y el propio pronóstico del tiempo. Cada 
+        pronóstico cubre un total de 48 horas.
+        \item \textbf{temperature:}
+        Temperatura del aire, en grados Celsius, 
+        a 2 metros sobre el nivel del suelo. Estimado
+        al final del periodo de 1 hora.
+        \item \textbf{dewpoint:}
+        La temperatura del punto de rocío, en 
+        grados celsius, a 2 metros sobre el nivel del 
+        suelo. Estimado al final del periodo de 1 hora.
+        \item \textbf{cloudcover\_[low/mid/high/total]:}
+        Porcentaje de cielo cubierto en las siguientes 
+        bandas de altitud: 0-2, 2-6, 6+ y total en km.
+        Estimado al final del periodo de 1 hora.
+        \item \textbf{10\_metre\_[u/v]\_wind\_component:}
+        Componente de la velocidad del viento en dirección
+        [este/norte] a 10 metros sobre la superficie, en 
+        metros por segundo (m/s).
+        Estimado al final del periodo de 1 hora.
+        \item \textbf{data\_blcok\_id}
+        \item \textbf{forecast\_datetime:}
+        Marca de tiempo de la predicción del tiempo.
+        Generado de la suma de `origin\_datetime' y 
+        `hours\_ahead'. Representa el inicio del periodo
+        de 1 hora donde se pronostican los datos del clima.
+        \item \textbf{direct\_solar\_radiation:}
+        \item \textbf{surface\_solar\_radiation\_downwards:}
+        \item \textbf{snowfall:}
+        \item \textbf{total\_precipitation:}
+    \end{itemize}
+
+    \item \textbf{historical\_weather.csv:}
+    \begin{itemize}
+        \item \textbf{datetime:}
+        \item \textbf{temperature:}
+        \item \textbf{dewpoint:}
+        \item \textbf{rain:}
+        \item \textbf{snowfall:}
+        \item \textbf{surface\_pressure:}
+        \item \textbf{cloudcover\_[low/mid/high/total]:}
+        \item \textbf{windspeed\_10m:}
+        \item \textbf{winddirection\_10m:}
+        \item \textbf{shortwave\_radiation:}
+        \item \textbf{direct\_solar\_radiation:}
+        \item \textbf{diffuse\_radiation:}
+        \item \textbf{[latitude/longitude]:}
+        \item \textbf{data\_block\_id:}
+    \end{itemize}
+
+\end{enumerate}
+
+\section{Predicción del consumo energético}
 
 \subsection{Base teórica}
 
