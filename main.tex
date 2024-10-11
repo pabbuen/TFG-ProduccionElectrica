@@ -1,10 +1,15 @@
 \documentclass[a4paper,12pt]{article}
 
 \usepackage[spanish]{babel} % Idioma del documento
-\usepackage{fancyhdr}       % Encabezados y pies de página
+\usepackage[nocheck]{fancyhdr}       % Encabezados y pies de página
 \usepackage{geometry}       % Configuración de márgenes
 \usepackage{setspace}       % Definir espacio interlineal
 \usepackage{hyperref}       % hipervinculos
+\usepackage{csquotes}
+\usepackage{showkeys}
+
+\usepackage[backend=biber,style=authoryear,sorting=none]{biblatex}    % Referencias
+\addbibresource{referencias.bib}    % Nombre del archivo .bib
 
 % Configuración de márgenes
 \geometry{
@@ -145,6 +150,13 @@ hasta un mínimo deseable.
 
 \subsubsection{Redes Neuronales Recurrentes (RNN)}
 
+Las redes neuronales recurrentes o RNN son un timo de redes neuronales 
+artificiales diseñadas principalmente para la detección de patrones
+en secuencias de datos \cite{RNN}. Su principal diferencia con el resto de redes
+neuronales, como los perceptrones multicapa o (MLP), reside en que
+las RNN poseen ciclos, los cuales permiten el paso de información
+no solo a capas posteriores si no también a si mismo.
+
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
 
 \subsubsection{Gated Recurrent Unit (GRU)}
@@ -190,6 +202,7 @@ de la serie.
 
 \subsubsection{Predicción}
 
+asdasd
 
 \section{Datos}
 
@@ -384,9 +397,13 @@ cada archivo y todas sus variables:
 
 \subsubsection{Clasificación Modelo 3}
 
+asdasd w fqf
+
 \section{Conclusiones}
+asdjsadjajsd
 
 \subsection{Predicción de consumo energético}
+akdjlaskdjkasj
 
 \subsection{Predicción de producción energética}
 
@@ -398,5 +415,7 @@ cada archivo y todas sus variables:
 
 \section*{Bibliografía}
 \addcontentsline{toc}{section}{Bibliografía}
+
+\printbibliography
 
 \end{document}

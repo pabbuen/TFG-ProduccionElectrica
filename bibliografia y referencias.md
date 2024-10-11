@@ -13,4 +13,6 @@
 
   - [2] Time Series Analysis of Household Electric Consumption with XGBoost Model. url: https://www.semanticscholar.org/paper/Time-Series-Analysis-of-Household-Electric-with-Houda-Lakhdar/ca65da720f26ec9a450ceb82950f7ea585fad5c9 (Necesária cuenta)
 
+  - [3] Schmidt - RNN. A gentle Introduction and Overview
+
   
