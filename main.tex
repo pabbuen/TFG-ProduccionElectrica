@@ -5,8 +5,10 @@
 \usepackage{geometry}           % Configuración de márgenes
 \usepackage{setspace}           % Definir espacio interlineal
 \usepackage{hyperref}           % hipervinculos
+\usepackage{graphicx}           % Figuras e imagenes
+\usepackage{amsmath}            % Ecuaciones matemáticas
+\usepackage{hyperref}
 \usepackage{csquotes}
-\usepackage{showkeys}
 
 \usepackage[backend=biber,style=numeric,sorting=none]{biblatex}    % Referencias
 \addbibresource{referencias.bib}    % Nombre del archivo .bib
@@ -146,16 +148,55 @@ hasta un mínimo deseable.
 \subsection{Deep Learning}
 
 % Los modelos vistos abajo pasarlos a otras secciones
-\subsubsection{Redes Neuronales Artificiales}
+\subsubsection{Redes Neuronales Artificiales}   
 
 \subsubsection{Redes Neuronales Recurrentes (RNN)}
 
-Las redes neuronales recurrentes o RNN son un timo de redes neuronales 
+Las redes neuronales recurrentes o RNN son un tipo de redes neuronales
 artificiales diseñadas principalmente para la detección de patrones
-en secuencias de datos \cite{RNN}. Su principal diferencia con el resto de redes
-neuronales, como los perceptrones multicapa o (MLP), reside en que
-las RNN poseen ciclos, los cuales permiten el paso de información
-no solo a capas posteriores si no también a si mismo.
+en secuencias de datos \cite{RNN}.
+
+\begin{figure}[h]
+    *Figura RNN*
+    \caption{Estructura de una red RNN}
+    \label{fig:RNN}
+\end{figure}
+
+Al igual que otros tipos de redes neuronales, como los perceptrones
+multicapa (MLP), la información se transmite desde la capa de entrada
+$\mathbf{X}_{t}$ hasta la capa de salida $\mathbf{O}_{t}$ pasando
+por el bloque de capa oculta $\mathbf{H}_{t}$. Sin embargo, 
+a diferencia de estas, la entrada del bloque de la capa oculta
+depende tanto de la entrada $\mathbf{X}_{t}$ como de la salida 
+del bloque en su iteración anterior $\mathbf{H}_{t-1}$. Ver figura
+\ref{fig:RNN}.
+
+La salida de los bloques $\mathbf{H}_{t}$ y $\mathbf{O}_{t}$ viene
+dada por las fórmulas:
+
+\begin{equation}
+    \mathbf{H}_{t} = \phi_{h}( \mathbf{X}_{t}\mathbf{W}_{xh} 
+    + \mathbf{H}_{t-1}\mathbf{W}_{hh}+\mathbf{b}_{h} ) 
+    \label{eq:rnn_ht}
+\end{equation}
+\begin{equation}
+    \label{eq:rnn_ot}
+    \mathbf{O}_{t} = \phi_{o} ( \mathbf{H}_{t} \mathbf{W}_{ho}
+    + \mathbf{b}_{o})
+\end{equation}
+
+Donde, $\mathbf{X}_{t}$ es la salida de la capa de entrada,
+$\mathbf{H}_{t}$ y $\mathbf{H}_{t-1}$ son las salidas de la capa 
+oculta en los instantes t y t-1, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$,
+y $\mathbf{W}_{ho}$ son las matrices de pesos entre las diferentes
+capas de la neurona y $\mathbf{b}_{h}$ y $\mathbf{b}_{o}$ son los
+vectores de bias o sesgo para la capa oculta y la de salida
+respectivamente.
+
+$\phi_{h}$ y $\phi_{o}$ son las funciones de activación 
+de las capas oculta y de salida respectivamente. En el caso
+de $\phi_{h}$ suele ser la función sigmoide ($\sigma$) o 
+tangente hiperbólica ($\tanh$)
 
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
 
