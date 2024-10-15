@@ -7,6 +7,7 @@
 \usepackage{hyperref}           % hipervinculos
 \usepackage{graphicx}           % Figuras e imagenes
 \usepackage{amsmath}            % Ecuaciones matemáticas
+\usepackage{amsfonts}           % Simbolos matemáticos
 \usepackage{hyperref}
 \usepackage{csquotes}
 
@@ -154,11 +155,15 @@ hasta un mínimo deseable.
 
 Las redes neuronales recurrentes o RNN son un tipo de redes neuronales
 artificiales diseñadas principalmente para la detección de patrones
-en secuencias de datos \cite{RNN}.
+en secuencias de datos \cite{RNN:desc}.
 
 \begin{figure}[h]
-    *Figura RNN*
-    \caption{Estructura de una red RNN}
+    \centering
+    \includegraphics[width=0.8\textwidth]{
+        referencias/imagenes/diagrama_RNN.png
+    }
+    \caption{Estructura de una red RNN con función 
+    de activación ReLU}
     \label{fig:RNN}
 \end{figure}
 
@@ -191,12 +196,36 @@ oculta en los instantes t y t-1, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$,
 y $\mathbf{W}_{ho}$ son las matrices de pesos entre las diferentes
 capas de la neurona y $\mathbf{b}_{h}$ y $\mathbf{b}_{o}$ son los
 vectores de bias o sesgo para la capa oculta y la de salida
-respectivamente.
+respectivamente. 
 
 $\phi_{h}$ y $\phi_{o}$ son las funciones de activación 
 de las capas oculta y de salida respectivamente. En el caso
-de $\phi_{h}$ suele ser la función sigmoide ($\sigma$) o 
-tangente hiperbólica ($\tanh$)
+de $\phi_{h}$ suele ser la función rectificador (ReLU) o 
+tangente hiperbólica ($\tanh$).
+
+\subsubsection{Backpropagation Through Time y problemas 
+de evanescencia / explosión del gradiente}
+
+Para poder comprender el principal problema de las redes 
+neuronales recurrentes es necesário conocer el funcionamiento
+del algoritmo de retropropagación a traves del tiempo o 
+BPTT (BackPropagation Through Time).
+
+Con el fin de entrenar una RNN, primero se debe establecer 
+una función de pérdida $\mathfrak{L}$, la cual nos permite 
+conocer la distancia entre el valor de salida de la neurona 
+$\mathbf{O}_{t}$ y el valor real $\mathbf{Y}_{t}$.
+
+\begin{equation}
+    \mathfrak{L}(\mathbf{O}, \mathbf{Y}) = 
+    \sum_{t=1}^{T}l_{t}(\mathbf{O}_{t}, \mathbf{Y}_{t})
+    \label{eq:rnn_loss}
+\end{equation}
+
+Con el fin de minimizar dicha distancia, se han de calcular 
+las derivadas parciales de $\mathfrak{L}$ con respecto 
+los pesos de la neurona, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$, 
+y $\mathbf{W}_{ho}$.
 
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
 
