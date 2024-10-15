@@ -218,14 +218,29 @@ $\mathbf{O}_{t}$ y el valor real $\mathbf{Y}_{t}$.
 
 \begin{equation}
     \mathfrak{L}(\mathbf{O}, \mathbf{Y}) = 
-    \sum_{t=1}^{T}l_{t}(\mathbf{O}_{t}, \mathbf{Y}_{t})
+    \sum_{t=1}^{T}\ell_{t}(\mathbf{O}_{t}, \mathbf{Y}_{t})
     \label{eq:rnn_loss}
 \end{equation}
 
 Con el fin de minimizar dicha distancia, se han de calcular 
 las derivadas parciales de $\mathfrak{L}$ con respecto 
 los pesos de la neurona, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$, 
-y $\mathbf{W}_{ho}$.
+y $\mathbf{W}_{ho}$. A partir de la ecuación \ref{eq:rnn_ot}
+aplicando la regla de la cadena, se puede obtener:
+
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{ho}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{W}_{ho}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{H}_{t}
+\end{equation}
 
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
 
