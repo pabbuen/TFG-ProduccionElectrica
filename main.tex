@@ -157,6 +157,7 @@ Las redes neuronales recurrentes o RNN son un tipo de redes neuronales
 artificiales diseñadas principalmente para la detección de patrones
 en secuencias de datos \cite{RNN:desc}.
 
+% SI ES POSIBLE HACER EL DIAGRAMA CON TIKZ 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{
@@ -240,7 +241,105 @@ aplicando la regla de la cadena, se puede obtener:
     \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
     \cdot
     \mathbf{H}_{t}
+    \label{eq:RNN_grads_Who}
 \end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{H}_{t}}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\partial\phi_{h}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\phi_{h}}{\partial\mathbf{W}_{hh}}
+    \label{eq:RNN_grads_Whh}
+\end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{H}_{t}}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\partial\phi_{h}}{\partial\mathbf{W}_{xh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\phi_{h}}{\partial\mathbf{W}_{xh}}
+    \label{eq:RNN_grads_Wxh}
+\end{equation}
+
+Las ecuaciones \ref{eq:RNN_grads_Whh} y \ref{eq:RNN_grads_Wxh},
+al depender $\mathbf{H}_{t}$ de sus valores anteriores, pueden
+reescribirse como:
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \sum_{k=1}^{t}
+    \frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}
+    \cdot
+    \frac{\partial\mathbf{H}_{k}}{\partial\mathbf{W}_{hh}}
+    \label{eq:RNN_gradsTD_Whh}
+\end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \sum_{k=1}^{t}
+    \frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}
+    \cdot
+    \frac{\partial\mathbf{H}_{k}}{\partial\mathbf{W}_{xh}}
+    \label{eq:RNN_gradsTD_Wxh}
+\end{equation}
+
+Para entender el problema de la evanescencia y explosión 
+del gradiente en las RNN es necesário fijarse en la expresión
+$\frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}$
+de las ecuaciones \ref{eq:RNN_gradsTD_Whh} y 
+\ref{eq:RNN_gradsTD_Wxh}.
+
+El problema de la evanescencia del gradiente se produce 
+cuando, en secuencias largas de datos, se establece unos
+pesos iniciales menores a 1. A medida que se entrena 
+la red RNN. Los gradientes se hacen menores con cada 
+iteración hasta llegar a desaparecer, provocando que 
+la red no pueda seguir entrenandose.
+
+Con el problema de la explosión del gradiente se da 
+una situación parecida a la evanescencia del gradiente,
+pero al contrario que esta, al establecer los pesos 
+iniciales a un valor superior a 1, los gradientes 
+se irán haciendo mayores con cada iteración hasta que 
+sean tan grandes que sea imposible entrenar la red 
+debido a que el valor de los pesos sufren grandes cambios
+en cada actualización, impidiendo encontrar un resultado 
+óptimo.
 
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
 
