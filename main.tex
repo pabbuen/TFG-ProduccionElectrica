@@ -92,7 +92,7 @@
 
 \subsection{Objetivos}
 
-\subsection{Organización y Estructura de la Memória}
+\subsection{Organización y Estructura de la memoria}
 
 
 
@@ -357,7 +357,7 @@ en 3 puertas principales.
 
 La primera de las puertas se denomina ``puerta del olvido''
 ($\mathbf{F}_{t}$). Es la parte de la red que se encarga 
-de decidir que porcentaje de la memória a largo plazo
+de decidir que porcentaje de la memoria a largo plazo
 ($\mathbf{C}_{t-1}$) se debe olvidar o mantener. 
 
 La segunda puerta es denomineada la ``puerta de entrada''
@@ -407,6 +407,47 @@ oculta y las diferentes puertas.
     \caption{Estructura de una red LSTM}
     \label{fig:LSTM}
 \end{figure}
+
+Con el fin de actualizar la memoria a largo plazo, primero
+es necesário calcular la memoria potencial 
+$\tilde{\mathbf{C}}$, la cual se calcula de manera
+similar al resto de puertas salvo por la función de 
+activación, la cual en lugar de ser la función sigmoide
+$\sigma$ utiliza una función de tangente hiperbólica
+$\tanh$ para caluclar su salida. Vease la ecuación
+\ref{eq:LSTM_Cp}.
+
+\begin{equation}
+    \tilde{\mathbf{C}_{t}} = \tanh\left(
+        \mathbf{X}_{t}\mathbf{W}_{xc} +
+        \mathbf{H}_{t-1}\mathbf{W}_{hc} + 
+        \mathbf{b}_{c}
+    \right)
+    \label{eq:LSTM_Cp}
+\end{equation}
+
+Con todas las puertas definidas, el valor de la memoria a 
+largo plazo viene dado por la ecuación \ref{eq:LSTM_C}
+
+\begin{equation}
+    \mathbf{C}_{t} = \mathbf{F}_{t} \odot \mathbf{C}_{t-1}
+    + \mathbf{I}_{t} \odot \tilde{\mathbf{C}_{t}}
+    \label{eq:LSTM_C}
+\end{equation}
+
+Por último, con la memoria a largo plazo actualizada,
+tanto el valor de la salida como el de la capa oculta 
+actualizada, vendrá dado por la función \ref{eq:LSTM_Ht}
+\begin{equation}
+    \mathbf{H}_{t} = \mathbf{O}_{t} \odot \tanh(\mathbf{C}_{t})
+\end{equation}
+
+Pese a solentar los problemas de evanescencia del gradiente,
+es posible que pueda producirse explosión del gradiente
+si no se predefinen bien las componentes. Pese a ello 
+las redes LSTM son, actualmente, uno de los modelos de 
+deep learning con mejores resultados para datos secuenciales
+como series temporales o reconocimiento del lenguage.
 
 \subsubsection{Gated Recurrent Unit (GRU)}
 
