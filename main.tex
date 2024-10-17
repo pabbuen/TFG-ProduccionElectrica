@@ -355,31 +355,58 @@ plazo y predecir la salida de dicha red.
 La estructura principal se caracteriza por su división 
 en 3 puertas principales.
 
-La primera de las puertas se denomina ``puerta del
-olvido''($\mathbf{F}_{t}$). Es la parte de la red que se encarga 
+La primera de las puertas se denomina ``puerta del olvido''
+($\mathbf{F}_{t}$). Es la parte de la red que se encarga 
 de decidir que porcentaje de la memória a largo plazo
-($\mathbf{C}_{t-1}$) se debe olvidar o mantener.    
+($\mathbf{C}_{t-1}$) se debe olvidar o mantener. 
+
+La segunda puerta es denomineada la ``puerta de entrada''
+($\mathbf{I}_{t}$), determina la cantidad de memoria 
+potencial a largo plazo debe añadirse.
+
+Por último se encuentra la ``puerta de salida''
+($\mathbf{O}_{t}$) la cual se encarga de determinar 
+cuánta memoria a corto plazo debe recordarse.
+
 \begin{equation}
     \mathbf{F}_{t} = \sigma\left(
         \mathbf{X}_{t}\mathbf{W}_{xf} +
         \mathbf{H}_{t-1}\mathbf{W}_{hf} + 
         \mathbf{b}_{f}
     \right)
+    \label{eq:LSTM_Ft}
 \end{equation}
 \begin{equation}
-    \mathbf{F}_{t} = \sigma\left(
+    \mathbf{I}_{t} = \sigma\left(
         \mathbf{X}_{t}\mathbf{W}_{xi} +
         \mathbf{H}_{t-1}\mathbf{W}_{hi} + 
         \mathbf{b}_{i}
     \right)
+    \label{eq:LSTM_It}
 \end{equation}
 \begin{equation}
-    \mathbf{F}_{t} = \sigma\left(
+    \mathbf{O}_{t} = \sigma\left(
         \mathbf{X}_{t}\mathbf{W}_{xo} +
         \mathbf{H}_{t-1}\mathbf{W}_{ho} + 
         \mathbf{b}_{o}
     \right)
+    \label{eq:LSTM_Ot}
 \end{equation}
+
+En las ecuaciones \ref{eq:LSTM_Ft}, \ref{eq:LSTM_It} y 
+\ref{eq:LSTM_Ot} puede observarse que el funcionamiento
+de las puertas es identico salvo por los pesos 
+$\mathbf{W}_{lj}$ y los bias $\mathbf{b}_{k}$ donde 
+$l$,$j$,$k$ $\in x,f,i,o,h$ entre la entrada, la capa
+oculta y las diferentes puertas.
+
+% Figura Estructura LSTM
+\begin{figure}[h]
+    \centering
+    **Estructura LSTM
+    \caption{Estructura de una red LSTM}
+    \label{fig:LSTM}
+\end{figure}
 
 \subsubsection{Gated Recurrent Unit (GRU)}
 
