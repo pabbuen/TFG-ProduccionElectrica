@@ -2,7 +2,6 @@ main.*
 !main.tex
 !main.pdf
 codigo/data
-codigo/Julia
 venv
 .venv
 referencias
