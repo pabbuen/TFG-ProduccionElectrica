@@ -545,7 +545,7 @@ cada archivo y todas sus variables:
         \item \textbf{datetime:}
         Hora local de Estonia en EET (UTC+2)/
         EEST(UTC+3). Define el inicio del periodo
-        de una hora en el cual se da el valore de 
+        de una hora en el cual se da el valor de 
         `target'.
         \item \textbf{data\_block\_id:}
         
@@ -596,6 +596,7 @@ cada archivo y todas sus variables:
         \item \textbf{data\_block\_id:}
     \end{itemize}
 
+    \iffalse
     \item \textbf{forecast\_weather.csv:}
     \begin{itemize}
         \item \textbf{[latitude/longitude]:}
@@ -635,22 +636,32 @@ cada archivo y todas sus variables:
         \item \textbf{snowfall:}
         \item \textbf{total\_precipitation:}
     \end{itemize}
+    \fi
 
     \item \textbf{historical\_weather.csv:}
     \begin{itemize}
-        \item \textbf{datetime:}
-        \item \textbf{temperature:}
-        \item \textbf{dewpoint:}
+        \item \textbf{datetime:} Día y hora a la que se hizo la 
+        medición de los datos.
+        \item \textbf{temperature:} Temperatura 
+        (ºC) tomada al final de la medición.
+        \item \textbf{dewpoint:} Punto de rocío (ºC)
         \item \textbf{rain:}
         \item \textbf{snowfall:}
-        \item \textbf{surface\_pressure:}
+        \item \textbf{surface\_pressure:} Presión del aire a 
+        nivel del suelo (hPa)
         \item \textbf{cloudcover\_[low/mid/high/total]:}
-        \item \textbf{windspeed\_10m:}
-        \item \textbf{winddirection\_10m:}
-        \item \textbf{shortwave\_radiation:}
+        Nivel de cubrimiento del cielo por las nubes a
+        alturas de 0-3, 3-8, 8+ km y el total. 
+        \item \textbf{windspeed\_10m:} Velocidad del viento (m/s) 
+        a 10 metros sobre el nivel del suelo.
+        \item \textbf{winddirection\_10m:} dirección del viento
+        (grados) a 10 metros sobre el nivel del suelo.
+        \item \textbf{shortwave\_radiation:} Radiación de onda 
+        corta ($Wh/m^{2}$)
         \item \textbf{direct\_solar\_radiation:}
         \item \textbf{diffuse\_radiation:}
-        \item \textbf{[latitude/longitude]:}
+        \item \textbf{[latitude/longitude]:} Coordenadas geográficas
+        de la estación climática.
         \item \textbf{data\_block\_id:}
     \end{itemize}
 
