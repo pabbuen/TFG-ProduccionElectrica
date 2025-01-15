@@ -1,10 +1,18 @@
 \documentclass[a4paper,12pt]{article}
 
-\usepackage[spanish]{babel} % Idioma del documento
-\usepackage{fancyhdr}       % Encabezados y pies de página
-\usepackage{geometry}       % Configuración de márgenes
-\usepackage{setspace}       % Definir espacio interlineal
-\usepackage{hyperref}       % hipervinculos
+\usepackage[spanish]{babel}     % Idioma del documento
+\usepackage[nocheck]{fancyhdr}  % Encabezados y pies de página
+\usepackage{geometry}           % Configuración de márgenes
+\usepackage{setspace}           % Definir espacio interlineal
+\usepackage{hyperref}           % hipervinculos
+\usepackage{graphicx}           % Figuras e imagenes
+\usepackage{amsmath}            % Ecuaciones matemáticas
+\usepackage{amsfonts}           % Simbolos matemáticos
+\usepackage{hyperref}
+\usepackage{csquotes}
+
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}    % Referencias
+\addbibresource{referencias.bib}    % Nombre del archivo .bib
 
 % Configuración de márgenes
 \geometry{
@@ -84,7 +92,7 @@
 
 \subsection{Objetivos}
 
-\subsection{Organización y Estructura de la Memória}
+\subsection{Organización y Estructura de la memoria}
 
 
 
@@ -141,18 +149,311 @@ hasta un mínimo deseable.
 \subsection{Deep Learning}
 
 % Los modelos vistos abajo pasarlos a otras secciones
-\subsubsection{Redes Neuronales Artificiales}
+\subsubsection{Redes Neuronales Artificiales}   
 
 \subsubsection{Redes Neuronales Recurrentes (RNN)}
 
+Las redes neuronales recurrentes o RNN son un tipo de redes neuronales
+artificiales diseñadas principalmente para la detección de patrones
+en secuencias de datos \cite{RNN:desc}.
+
+% SI ES POSIBLE HACER EL DIAGRAMA CON TIKZ 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{
+        referencias/imagenes/diagrama_RNN.png
+    }
+    \caption{Estructura de una red RNN con función 
+    de activación ReLU}
+    \label{fig:RNN}
+\end{figure}
+
+Al igual que otros tipos de redes neuronales, como los perceptrones
+multicapa (MLP), la información se transmite desde la capa de entrada
+$\mathbf{X}_{t}$ hasta la capa de salida $\mathbf{O}_{t}$ pasando
+por el bloque de capa oculta $\mathbf{H}_{t}$. Sin embargo, 
+a diferencia de estas, la entrada del bloque de la capa oculta
+depende tanto de la entrada $\mathbf{X}_{t}$ como de la salida 
+del bloque en su iteración anterior $\mathbf{H}_{t-1}$. Ver figura
+\ref{fig:RNN}.
+
+La salida de los bloques $\mathbf{H}_{t}$ y $\mathbf{O}_{t}$ viene
+dada por las fórmulas:
+
+\begin{equation}
+    \mathbf{H}_{t} = \phi_{h}( \mathbf{X}_{t}\mathbf{W}_{xh} 
+    + \mathbf{H}_{t-1}\mathbf{W}_{hh}+\mathbf{b}_{h} ) 
+    \label{eq:rnn_ht}
+\end{equation}
+\begin{equation}
+    \label{eq:rnn_ot}
+    \mathbf{O}_{t} = \phi_{o} ( \mathbf{H}_{t} \mathbf{W}_{ho}
+    + \mathbf{b}_{o})
+\end{equation}
+
+Donde, $\mathbf{X}_{t}$ es la salida de la capa de entrada,
+$\mathbf{H}_{t}$ y $\mathbf{H}_{t-1}$ son las salidas de la capa 
+oculta en los instantes t y t-1, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$,
+y $\mathbf{W}_{ho}$ son las matrices de pesos entre las diferentes
+capas de la neurona y $\mathbf{b}_{h}$ y $\mathbf{b}_{o}$ son los
+vectores de bias o sesgo para la capa oculta y la de salida
+respectivamente. 
+
+$\phi_{h}$ y $\phi_{o}$ son las funciones de activación 
+de las capas oculta y de salida respectivamente. En el caso
+de $\phi_{h}$ suele ser la función rectificador (ReLU) o 
+tangente hiperbólica ($\tanh$).
+
+\subsubsection{Backpropagation Through Time y problemas 
+de evanescencia / explosión del gradiente}
+
+Para poder comprender el principal problema de las redes 
+neuronales recurrentes es necesário conocer el funcionamiento
+del algoritmo de retropropagación a traves del tiempo o 
+BPTT (BackPropagation Through Time).
+
+Con el fin de entrenar una RNN, primero se debe establecer 
+una función de pérdida $\mathfrak{L}$, la cual nos permite 
+conocer la distancia entre el valor de salida de la neurona 
+$\mathbf{O}_{t}$ y el valor real $\mathbf{Y}_{t}$.
+
+\begin{equation}
+    \mathfrak{L}(\mathbf{O}, \mathbf{Y}) = 
+    \sum_{t=1}^{T}\ell_{t}(\mathbf{O}_{t}, \mathbf{Y}_{t})
+    \label{eq:rnn_loss}
+\end{equation}
+
+Con el fin de minimizar dicha distancia, se han de calcular 
+las derivadas parciales de $\mathfrak{L}$ con respecto 
+los pesos de la neurona, $\mathbf{W}_{xh}$, $\mathbf{W}_{hh}$, 
+y $\mathbf{W}_{ho}$. A partir de la ecuación \ref{eq:rnn_ot}
+aplicando la regla de la cadena, se puede obtener:
+
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{ho}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{W}_{ho}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{H}_{t}
+    \label{eq:RNN_grads_Who}
+\end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{H}_{t}}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\partial\phi_{h}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\phi_{h}}{\partial\mathbf{W}_{hh}}
+    \label{eq:RNN_grads_Whh}
+\end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \frac{\partial\phi_{o}}{\partial\mathbf{H}_{t}}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\partial\phi_{h}}{\partial\mathbf{W}_{xh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \cdot
+    \frac{\partial\mathbf{H}_{t}}{\partial\phi_{h}}
+    \cdot
+    \frac{\phi_{h}}{\partial\mathbf{W}_{xh}}
+    \label{eq:RNN_grads_Wxh}
+\end{equation}
+
+Las ecuaciones \ref{eq:RNN_grads_Whh} y \ref{eq:RNN_grads_Wxh},
+al depender $\mathbf{H}_{t}$ de sus valores anteriores, pueden
+reescribirse como:
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \sum_{k=1}^{t}
+    \frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}
+    \cdot
+    \frac{\partial\mathbf{H}_{k}}{\partial\mathbf{W}_{hh}}
+    \label{eq:RNN_gradsTD_Whh}
+\end{equation}
+\begin{equation}
+    \frac{\partial\mathfrak{L}}{\partial\mathbf{W}_{hh}} = 
+    \sum_{t=1}^{T}\frac{\partial\ell_{t}}{\partial\mathbf{O}_{t}}
+    \cdot
+    \frac{\partial\mathbf{O}_{t}}{\partial\phi_{o}}
+    \cdot
+    \mathbf{W}_{ho}
+    \sum_{k=1}^{t}
+    \frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}
+    \cdot
+    \frac{\partial\mathbf{H}_{k}}{\partial\mathbf{W}_{xh}}
+    \label{eq:RNN_gradsTD_Wxh}
+\end{equation}
+
+Para entender el problema de la evanescencia y explosión 
+del gradiente en las RNN es necesário fijarse en la expresión
+$\frac{\partial\mathbf{H}_{t}}{\partial\mathbf{H}_{k}}$
+de las ecuaciones \ref{eq:RNN_gradsTD_Whh} y 
+\ref{eq:RNN_gradsTD_Wxh}.
+
+El problema de la evanescencia del gradiente se produce 
+cuando, en secuencias largas de datos, se establece unos
+pesos iniciales menores a 1. A medida que se entrena 
+la red RNN. Los gradientes se hacen menores con cada 
+iteración hasta llegar a desaparecer, provocando que 
+la red no pueda seguir entrenandose.
+
+Con el problema de la explosión del gradiente se da 
+una situación parecida a la evanescencia del gradiente,
+pero al contrario que esta, al establecer los pesos 
+iniciales a un valor superior a 1, los gradientes 
+se irán haciendo mayores con cada iteración hasta que 
+sean tan grandes que sea imposible entrenar la red 
+debido a que el valor de los pesos sufren grandes cambios
+en cada actualización, impidiendo encontrar un resultado 
+óptimo.
+
 \subsubsection{Redes Long Short-Term Memory (LSTM)}
+
+Con el fin de solventar los problemas de la evanescencia
+y explosión del gradiente de las redes recurrentes, 
+en 1997 se ideo una nueva estructura de red recurrente.
+
+La principal diferencia entre una red LSTM y una RNN 
+es la presencia de un nuevo tipo de memoria a largo
+plazo la cual ayuda a regular la memoria a corto 
+plazo y predecir la salida de dicha red.
+
+La estructura principal se caracteriza por su división 
+en 3 puertas principales.
+
+La primera de las puertas se denomina ``puerta del olvido''
+($\mathbf{F}_{t}$). Es la parte de la red que se encarga 
+de decidir que porcentaje de la memoria a largo plazo
+($\mathbf{C}_{t-1}$) se debe olvidar o mantener. 
+
+La segunda puerta es denomineada la ``puerta de entrada''
+($\mathbf{I}_{t}$), determina la cantidad de memoria 
+potencial a largo plazo debe añadirse.
+
+Por último se encuentra la ``puerta de salida''
+($\mathbf{O}_{t}$) la cual se encarga de determinar 
+cuánta memoria a corto plazo debe recordarse.
+
+\begin{equation}
+    \mathbf{F}_{t} = \sigma\left(
+        \mathbf{X}_{t}\mathbf{W}_{xf} +
+        \mathbf{H}_{t-1}\mathbf{W}_{hf} + 
+        \mathbf{b}_{f}
+    \right)
+    \label{eq:LSTM_Ft}
+\end{equation}
+\begin{equation}
+    \mathbf{I}_{t} = \sigma\left(
+        \mathbf{X}_{t}\mathbf{W}_{xi} +
+        \mathbf{H}_{t-1}\mathbf{W}_{hi} + 
+        \mathbf{b}_{i}
+    \right)
+    \label{eq:LSTM_It}
+\end{equation}
+\begin{equation}
+    \mathbf{O}_{t} = \sigma\left(
+        \mathbf{X}_{t}\mathbf{W}_{xo} +
+        \mathbf{H}_{t-1}\mathbf{W}_{ho} + 
+        \mathbf{b}_{o}
+    \right)
+    \label{eq:LSTM_Ot}
+\end{equation}
+
+En las ecuaciones \ref{eq:LSTM_Ft}, \ref{eq:LSTM_It} y 
+\ref{eq:LSTM_Ot} puede observarse que el funcionamiento
+de las puertas es identico salvo por los pesos 
+$\mathbf{W}_{lj}$ y los bias $\mathbf{b}_{k}$ donde 
+$l$,$j$,$k$ $\in x,f,i,o,h$ entre la entrada, la capa
+oculta y las diferentes puertas.
+
+% Figura Estructura LSTM
+\begin{figure}[h]
+    \centering
+    **Estructura LSTM
+    \caption{Estructura de una red LSTM}
+    \label{fig:LSTM}
+\end{figure}
+
+Con el fin de actualizar la memoria a largo plazo, primero
+es necesário calcular la memoria potencial 
+$\tilde{\mathbf{C}}$, la cual se calcula de manera
+similar al resto de puertas salvo por la función de 
+activación, la cual en lugar de ser la función sigmoide
+$\sigma$ utiliza una función de tangente hiperbólica
+$\tanh$ para caluclar su salida. Vease la ecuación
+\ref{eq:LSTM_Cp}.
+
+\begin{equation}
+    \tilde{\mathbf{C}_{t}} = \tanh\left(
+        \mathbf{X}_{t}\mathbf{W}_{xc} +
+        \mathbf{H}_{t-1}\mathbf{W}_{hc} + 
+        \mathbf{b}_{c}
+    \right)
+    \label{eq:LSTM_Cp}
+\end{equation}
+
+Con todas las puertas definidas, el valor de la memoria a 
+largo plazo viene dado por la ecuación \ref{eq:LSTM_C}
+
+\begin{equation}
+    \mathbf{C}_{t} = \mathbf{F}_{t} \odot \mathbf{C}_{t-1}
+    + \mathbf{I}_{t} \odot \tilde{\mathbf{C}_{t}}
+    \label{eq:LSTM_C}
+\end{equation}
+
+Por último, con la memoria a largo plazo actualizada,
+tanto el valor de la salida como el de la capa oculta 
+actualizada, vendrá dado por la función \ref{eq:LSTM_Ht}
+\begin{equation}
+    \mathbf{H}_{t} = \mathbf{O}_{t} \odot \tanh(\mathbf{C}_{t})
+\end{equation}
+
+Pese a solentar los problemas de evanescencia del gradiente,
+es posible que pueda producirse explosión del gradiente
+si no se predefinen bien las componentes. Pese a ello 
+las redes LSTM son, actualmente, uno de los modelos de 
+deep learning con mejores resultados para datos secuenciales
+como series temporales o reconocimiento del lenguage.
 
 \subsubsection{Gated Recurrent Unit (GRU)}
 
 \subsubsection{Redes Neuronales Convolucionales (CNN)}
 
 \subsubsection{Autoregressive Integrated Moving Average (ARIMA)}
-
 
 \subsection{Series Temporales}
 
@@ -190,6 +491,7 @@ de la serie.
 
 \subsubsection{Predicción}
 
+asdasd
 
 \section{Datos}
 
@@ -202,9 +504,15 @@ realizado para el trabajo actual.
 
 El trabajo se ha realizado sobre un dataset obtenido de 
 una competición de Kaggle llamada 
-\textit{``Enefit - Predict Energy Behavior of Prosumers"}
+\href{https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/data}{
+    \textit{``Enefit - Predict Energy Behavior of Prosumers"}}
 realizada entre el 1 de Noviembre de 2023 y el 31 de 
 Enero de 2024.
+
+Para ayudar con el pre-procesamiento de los datos, se ha usado el dataset
+\href{https://www.kaggle.com/datasets/michaelo/fabiendaniels-mapping-locations-and-county-codes}{
+    \textit{``fabiendaniels-mapping-locations-and-county-codes''}}, el cual ayuda a 
+asignar un condado a una longitud y latitud especificas.
 
 \subsection{Descripción}
 
@@ -237,7 +545,7 @@ cada archivo y todas sus variables:
         \item \textbf{datetime:}
         Hora local de Estonia en EET (UTC+2)/
         EEST(UTC+3). Define el inicio del periodo
-        de una hora en el cual se da el valore de 
+        de una hora en el cual se da el valor de 
         `target'.
         \item \textbf{data\_block\_id:}
         
@@ -288,6 +596,7 @@ cada archivo y todas sus variables:
         \item \textbf{data\_block\_id:}
     \end{itemize}
 
+    \iffalse
     \item \textbf{forecast\_weather.csv:}
     \begin{itemize}
         \item \textbf{[latitude/longitude]:}
@@ -327,26 +636,39 @@ cada archivo y todas sus variables:
         \item \textbf{snowfall:}
         \item \textbf{total\_precipitation:}
     \end{itemize}
+    \fi
 
     \item \textbf{historical\_weather.csv:}
     \begin{itemize}
-        \item \textbf{datetime:}
-        \item \textbf{temperature:}
-        \item \textbf{dewpoint:}
+        \item \textbf{datetime:} Día y hora a la que se hizo la 
+        medición de los datos.
+        \item \textbf{temperature:} Temperatura 
+        (ºC) tomada al final de la medición.
+        \item \textbf{dewpoint:} Punto de rocío (ºC)
         \item \textbf{rain:}
         \item \textbf{snowfall:}
-        \item \textbf{surface\_pressure:}
+        \item \textbf{surface\_pressure:} Presión del aire a 
+        nivel del suelo (hPa)
         \item \textbf{cloudcover\_[low/mid/high/total]:}
-        \item \textbf{windspeed\_10m:}
-        \item \textbf{winddirection\_10m:}
-        \item \textbf{shortwave\_radiation:}
+        Nivel de cubrimiento del cielo por las nubes a
+        alturas de 0-3, 3-8, 8+ km y el total. 
+        \item \textbf{windspeed\_10m:} Velocidad del viento (m/s) 
+        a 10 metros sobre el nivel del suelo.
+        \item \textbf{winddirection\_10m:} dirección del viento
+        (grados) a 10 metros sobre el nivel del suelo.
+        \item \textbf{shortwave\_radiation:} Radiación de onda 
+        corta ($Wh/m^{2}$)
         \item \textbf{direct\_solar\_radiation:}
         \item \textbf{diffuse\_radiation:}
-        \item \textbf{[latitude/longitude]:}
+        \item \textbf{[latitude/longitude]:} Coordenadas geográficas
+        de la estación climática.
         \item \textbf{data\_block\_id:}
     \end{itemize}
 
 \end{enumerate}
+
+\subsection{Preprocesamiento}
+preprocesamiento
 
 \section{Predicción del consumo energético}
 
@@ -384,9 +706,13 @@ cada archivo y todas sus variables:
 
 \subsubsection{Clasificación Modelo 3}
 
+asdasd w fqf
+
 \section{Conclusiones}
+asdjsadjajsd
 
 \subsection{Predicción de consumo energético}
+akdjlaskdjkasj
 
 \subsection{Predicción de producción energética}
 
@@ -398,5 +724,7 @@ cada archivo y todas sus variables:
 
 \section*{Bibliografía}
 \addcontentsline{toc}{section}{Bibliografía}
+
+\printbibliography
 
 \end{document}

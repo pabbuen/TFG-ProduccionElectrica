@@ -1,13 +1,7 @@
-main.aux
-main.fdb_latexmk
-main.fls
-main.log
-main.synctex.gz
-main.pdf
-main.out
-main.toc
+main.*
+!main.tex
+!main.pdf
 codigo/data
 venv
 .venv
-.jenv
 referencias
