@@ -1,7 +1,13 @@
+# Documento
 main.*
 !main.tex
 !main.pdf
+
+# Datos y entornos virtuales
 codigo/data
 venv
 .venv
-referencias
+
+# Referencias
+documento/referencias/*
+!documento/referencias/bibliografia y referencias.md
