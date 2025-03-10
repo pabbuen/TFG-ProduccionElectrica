@@ -529,71 +529,103 @@ cada archivo y todas sus variables:
 \begin{enumerate}
     \item \textbf{train.csv:}
     \begin{itemize}
-        \item \textbf{country:} 
-        ID del pais.
+        \item \textbf{county:} 
+        ID del condado.
+
         \item \textbf{is\_business:}
         Indica si el consumidor es una empresa o
         un individuo.
+
         \item \textbf{product\_type:}
         ID de un mapa de tipo de contrato.
+
         \item \textbf{target:} 
         cantidad de consumo o producción del 
         segmento relevante durante la hora. 
+
         \item \textbf{is\_consumption:}
         Indica si el elemento de la columna 
         `target' es de consumo o producción.
+
         \item \textbf{datetime:}
         Hora local de Estonia en EET (UTC+2)/
         EEST(UTC+3). Define el inicio del periodo
         de una hora en el cual se da el valor de 
         `target'.
+
         \item \textbf{data\_block\_id:}
+        ID relacionado con la fecha de la toma de los datos.
         
         \item \textbf{row\_id:}
         Identificador único de la fila
+
         \item \textbf{prediction\_unit\_id:}
         Identificador único formado por la unión de
         las columnas `country', `is\_business' y 
         `product\_type'.
+
     \end{itemize}
     
     \item \textbf{gas\_prizes.csv:}
     \begin{itemize}
+
         \item \textbf{origin\_date:}
         Fecha en el que los precios diarios
         se hicieron disponibles.
+
         \item \textbf{forecast\_date:}
         Fecha en la que los precios previstos
         deberían ser relevantes
+
         \item \textbf{[lowest/highest]\_price\_per\_mwh:}
         El precio mínimo/máximo del gas natural en el 
         mercado diario ese dia de negociación.
+
         \item \textbf{data\_block\_id}
+        Identificador asociado a la fecha de registro de los datos.
+
     \end{itemize}
 
     \item \textbf{client.csv:}
     \begin{itemize}
         \item \textbf{product\_type:}
+        ID de un mapa de tipo de contrato.
+
         \item \textbf{country:}
         ID del código del pais.
+
         \item \textbf{eic\_count:}
         Número agregado de puntos de consumo
         (EICs - European Identifier Code).
+
         \item \textbf{installed\_capacity:}
         Capacidad, en KWh, de los paneles solares
         fotovoltaicos instalados.
+
         \item \textbf{is\_business:}
+        Indicador booleano del tipo de cliente. (empresa 
+        o particular)
+
         \item \textbf{date:}
+        Fecha de registro de los datos del cliente.
+
         \item \textbf{data\_block\_id:}
+        Identificador asociado a la fecha de registro de los datos
+
     \end{itemize}
 
     \item \textbf{electricity\_prices.csv:}
     \begin{itemize}
         \item \textbf{origin\_date:}
+        Fecha del registro de los datos.
+
         \item \textbf{forecast\_date:}
+
         \item \textbf{euros\_per\_mwh:}
-        Precio de la electricidad en MWh
+        Precio de la electricidad en MWh.
+
         \item \textbf{data\_block\_id:}
+        Identificador asociado a la fecha de registro de los datos.
     \end{itemize}
 
     \iffalse
@@ -633,7 +665,7 @@ cada archivo y todas sus variables:
         de 1 hora donde se pronostican los datos del clima.
         \item \textbf{direct\_solar\_radiation:}
         \item \textbf{surface\_solar\_radiation\_downwards:}
-        \item \textbf{snowfall:}
+        \item \textbf{snowfall:}º
         \item \textbf{total\_precipitation:}
     \end{itemize}
     \fi
