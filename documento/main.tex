@@ -683,9 +683,11 @@ cada archivo y todas sus variables:
         Punto de rocío (ºC).
 
         \item \textbf{rain:}
+        Lluvia precipitada durante la marca de tiempo ($mm^{3}$)
 
         \item \textbf{snowfall:}
-        
+        Nieve precipitada durante la marca de tiempo ($cm^{3}$)
+
         \item \textbf{surface\_pressure:} 
         Presión del aire a nivel del suelo (hPa)
 
@@ -703,19 +705,90 @@ cada archivo y todas sus variables:
         Radiación de onda corta ($Wh/m^{2}$)
 
         \item \textbf{direct\_solar\_radiation:}
+        Radiación solar directa ($\frac{W}{m^{3}}$)
 
         \item \textbf{diffuse\_radiation:}
+        Radiación solar difusa ($\frac{W}{m^{3}}$)
 
         \item \textbf{[latitude/longitude]:} 
         Coordenadas geográficas de la estación climática.
         
         \item \textbf{data\_block\_id:}
+        Identificador asociado a la fecha de registro de los datos.
+
     \end{itemize}
 
 \end{enumerate}
 
 \section{Preprocesamiento}
-preprocesamiento
+El entrenamiento de los diferentes modelos 
+de inteligencia artificial requiere de un 
+correcto tratamiento de los datos de entrada
+para poder no solo ser entrenados, si no hacerlo
+de la manera mas óptima posible.
+
+Los datos obtenidos desde la plataforma de kaggle
+han de pasar por un previo de procesamiento 
+adecuado con el fin de adecuarlo lo mas posible
+a los modelos que serán entrenados con posterioridad.
+
+El procesamiento de los datos estará dividido en 
+diferentes partes claramente diferenciadas, las cuales
+serán explicadas en los siguientes apartados.
+
+\subsection{Obtención de características y
+unificación de los datos}
+El primer paso a tomar en el procesamiento de los
+dátos será el de la unificación de los diferentes
+conjuntos de datos en un único dataset. 
+
+Para ello antes es necesário tratar dichos datos 
+y obtener una serie de características únicas
+para poder obtener datos relevantes y un punto de
+conexión sobre el que podrán unirse mas adelante.
+
+A continuación se listan los diferentes tratamientos
+por los que han pasado los diferentes datos.
+
+\subsubsection{train.csv}
+En el entrenamiento de series temporales, los modelos
+de aprendizaje automático no pueden procesar directamente
+los valores de tipo datetime, por lo que el principal
+tratamiento para el conjunto será el de aplicar la 
+extracción de características temporales.
+
+La extracción de características temporales o ingeniería de 
+caracteristicas temporales, como su nombre indica, 
+consiste en transformar los datos de una variable 
+temporal en variables numéricas o categóricas, las cuales
+permiten la identificación de patrones estacionales, tendencias y 
+otros efectos que pueden influir en las series analizadas.
+
+Las características obtenidas para el conjunto han sido 
+las siguientes:
+\begin{itemize}
+    \item \textbf{Date:} fecha compuesta únicamente
+    por el año, mes y día, ignorando las marcas horarias
+    (\%YYYY-\%MM-\%DD).
+
+    \item \textbf{Year:} Año de la fecha (\%YYYY).
+
+    \item \textbf{Quarter:} Quatrimestre. Útil 
+    para la parte financiera, como los precios de
+    consumo de la energía (1-3).
+
+    \item \textbf{Month:} Mes del año (1-12).
+
+    \item \textbf{Week:} Semana del año (1-55).
+    
+    \item \textbf{Hour:} Hora del día (0-23).
+
+    \item \textbf{Day of year:} Día del año (1-355:366)
+
+    \item \textbf{Day of month:} Día del mes (1-27:28:30:31)
+
+    \item \textbf{Day of week:} Día de la semana (1-7)
+\end{itemize}
 
 \section{Predicción del consumo energético}
 
